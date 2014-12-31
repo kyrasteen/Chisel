@@ -1,0 +1,77 @@
+require 'minitest/autorun'
+require 'minitest/pride'
+require './chisel'
+
+class ChiselTest < Minitest::Test
+
+  def setup
+    @parser = Chisel.new
+    @document = "#this is a string"
+    @para = "I love ice cream"
+  end
+
+  def test_it_creates_a_chisel
+    chisel = Chisel.new
+  end
+
+  def test_it_recognizes_linebreak
+    doc = "Food:
+          1.soup"
+    list = @parser.line_break(doc)
+    assert_equal "Food:\n1.soup", list
+  end
+
+  def test_it_has_a_method_paragraph
+    para = @parser.paragraph(@para)
+    assert_equal "<p>I love ice cream</p>", para
+  end
+
+  def test_it_has_a_method_chunkify
+    doc = "This is great
+
+    woohoo"
+    assert_equal ["This is great", "woohoo"], @parser.chunkify(doc)
+  end
+
+  def test_it_has_a_method_parse
+    skip
+    assert_equal "<h1>this is a string</h1>", @parser.parse(@document)
+  end
+
+  def test_it_parses_h2_and_h3
+    document = "###this is a string"
+    assert_equal "<h3>this is a string</h3>", @parser.header(document)
+  end
+
+  def test_it_parses_emphasize
+    skip
+    document = "*love*"
+    assert_equal "<em>love</em>", @parser.parse(document)
+  end
+
+  def test_it_parses_strong
+    skip
+    document = 'I **love** ice cream'
+    assert_equal "<p>I <strong>love</strong> ice cream</p>", @parser.parse(document)
+  end
+
+  def test_it_parses_lists
+    skip
+    document = 'food:
+    1.soup
+    2.bread
+    3.cheese'
+  #assert
+  end
+
+  def test_it_parses
+    skip
+    document = "#Ice cream
+    ##Flavors:
+    1.chocolate
+    2.chunky monkey
+    3.caramel
+    I *love* **ice cream**!"
+    #assert
+  end
+end
