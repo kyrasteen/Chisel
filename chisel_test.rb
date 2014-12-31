@@ -44,24 +44,30 @@ class ChiselTest < Minitest::Test
   end
 
   def test_it_parses_emphasize
-    skip
     document = "*love*"
-    assert_equal "<em>love</em>", @parser.parse(document)
+    assert_equal "<em>love</em>", @parser.emphasize(document)
   end
 
   def test_it_parses_strong
-    skip
     document = 'I **love** ice cream'
-    assert_equal "<p>I <strong>love</strong> ice cream</p>", @parser.parse(document)
+    assert_equal "<p>I <strong>love</strong> ice cream</p>", @parser.strong(document)
   end
 
-  def test_it_parses_lists
-    skip
+  def test_it_parses_unordered_lists
     document = 'food:
-    1.soup
-    2.bread
-    3.cheese'
-  #assert
+    * soup
+    * bread
+    * cheese'
+    assert_equal "<ul>food:
+    <li>soup</li>
+    <li>bread</li>
+    <li>cheese</li>
+    </ul>", @parser.unordered_lists(document)
+  end
+
+  def test_it_parses_ordered_lists
+    skip
+
   end
 
   def test_it_parses

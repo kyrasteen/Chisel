@@ -32,19 +32,15 @@ class Chisel
     chunks
   end
 
-  def header
-
-  end
-
-  def parse(document)
-
-    if document.include?("\n")
-        lines = line_break(document)
+  def strong(document)
+    words = document.split(' ')
+    emphasized = words.map do |word|
+      if word.start_with?('**')
+        emph = word.gsub("**",'<strong>')
+        emph = emph.insert(-8, '/')
+      end
     end
-
-    if document =~ /^[A-Z]/
-      list = paragraph(document)
-    end
+    emphasized.join(' ')
   end
 
   def header(document)
@@ -60,18 +56,34 @@ class Chisel
     end
   end
 
-    # words = document.split(' ')
-    #
-    # words.each do |word|
-    #   if word.start_with?('*') && word.end_with?("*")
-    #     emphasized = word.gsub("*",'<em>')
-    #     emphasized.insert(-4, '/')
-    #   end
-    # end
-    # words.join(' ')
-#
+  def emphasize(document)
+    words = document.split(' ')
+    emphasized = words.map do |word|
+        emph = word.gsub("*",'<em>')
+        emph = emph.insert(-4, '/')
+    end
+        emphasized.join(' ')
+  end
+
+  def unordered_lists(document)
+    # *_
+    lines = document.split("\n")
+    items = lines.map do |line|
+        li = line.gsub("* ",'<li>') + "</li>"
+    end
+    list = items.join("\n")
+    '<ul>' + list + "\n</ul>"
+  end
+
+  def parse(document)
+
+    if document.include?("\n")
+      lines = line_break(document)
+    end
+
+    if document =~ /^[A-Z]/
+      list = paragraph(document)
+    end
+  end
 
  end
-# document = "###this is a string"
-# parser = Chisel.new
-# puts parser.parse(document)
